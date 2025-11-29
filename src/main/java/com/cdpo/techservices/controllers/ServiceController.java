@@ -35,6 +35,17 @@ public class ServiceController {
         return serviceList;
     }
 
-    @PutMapping
-    public ServiceDTO editService (@PathVariable int id, @RequestParam String)
+    @PutMapping("/{id}")
+    public ServiceDTO editService (@PathVariable int id,
+                                   @RequestParam String serviceName,
+                                   @RequestParam String workerName){
+        for (int i = 0; i < serviceList.size(); i++) {
+            ServiceDTO tempService = new ServiceDTO(id, serviceName, workerName);
+            if (serviceList.get(i).getId() == id) {
+                serviceList.set(i, tempService);
+                return serviceList.get(i);
+            }
+        }
+        return null;
+    }
 }
