@@ -1,7 +1,7 @@
 package com.cdpo.techservices.dto;
 
 public class ServiceDTO {
-    private int id;
+    private final int id;
     private String serviceName;
     private String workerName;
     public ServiceDTO(int id, String serviceName, String workerName) {
@@ -11,6 +11,12 @@ public class ServiceDTO {
     }
 
     public int getId() {
-        return id;
+        return this.id;
+    }
+    public String getServiceName() {
+        return this.serviceName;
+    }
+    public String getWorkerName() {
+        return this.workerName;
     }
 }

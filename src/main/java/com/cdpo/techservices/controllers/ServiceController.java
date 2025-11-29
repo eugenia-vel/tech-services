@@ -10,6 +10,7 @@ import java.util.List;
 @RestController
 public class ServiceController {
     private List<ServiceDTO> serviceList = new ArrayList<>();
+
     @PostMapping
     public int createService (@RequestBody() ServiceDTO serviceDTO) {
         List<ServiceDTO> serviceTemp = new ArrayList<>(serviceList);
@@ -19,15 +20,21 @@ public class ServiceController {
         return 0;
     }
 
-//    @PutMapping
-//    public int editService ()
-//
-//    @GetMapping
-//    public int getServiceById (@RequestParam int id) {
-//        return id;
-//    }
-//    @GetMapping
-//    public int getListOfServices () {
-//
-//    }
+    @GetMapping
+    public ServiceDTO getServiceById (@RequestParam int id) {
+        for (ServiceDTO service : serviceList) {
+            if (service.getId() == id) {
+                return service;
+            }
+        }
+        return null;
+    }
+
+    @GetMapping("/services")
+    public List<ServiceDTO> getListOfServices () {
+        return serviceList;
+    }
+
+    @PutMapping
+    public ServiceDTO editService (@PathVariable int id, @RequestParam String)
 }
