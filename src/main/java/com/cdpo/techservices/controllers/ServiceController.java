@@ -1,18 +1,24 @@
 package com.cdpo.techservices.controllers;
 
 import com.cdpo.techservices.dto.ServiceDTO;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Positive;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Validated
 @RequestMapping("/api/v1/service")
 @RestController
 public class ServiceController {
     private List<ServiceDTO> serviceList = new ArrayList<>();
 
     @PostMapping
-    public int createService (@RequestBody() ServiceDTO serviceDTO) {
+    public int createService (@RequestBody() @Valid ServiceDTO serviceDTO) {
         List<ServiceDTO> serviceTemp = new ArrayList<>(serviceList);
         serviceTemp.add(serviceDTO);
         serviceList = serviceTemp;
@@ -21,7 +27,7 @@ public class ServiceController {
     }
 
     @GetMapping
-    public ServiceDTO getServiceById (@RequestParam int id) {
+    public ServiceDTO getServiceById (@RequestParam @Positive int id) {
         for (ServiceDTO service : serviceList) {
             if (service.getId() == id) {
                 return service;
@@ -36,12 +42,18 @@ public class ServiceController {
     }
 
     @PutMapping("/{id}")
-    public ServiceDTO editService (@PathVariable int id,
-                                   @RequestParam String serviceName,
-                                   @RequestParam String workerName){
+    public ServiceDTO editService (@PathVariable @Positive int id,
+                                   @RequestParam(required = false) @NotBlank @NotEmpty String serviceName,
+                                   @RequestParam(required = false) @NotBlank @NotEmpty String workerName){
         for (int i = 0; i < serviceList.size(); i++) {
-            ServiceDTO tempService = new ServiceDTO(id, serviceName, workerName);
             if (serviceList.get(i).getId() == id) {
+                if (serviceName == null){
+                    serviceName = serviceList.get(i).getServiceName();
+                }
+                if (workerName == null){
+                    workerName = serviceList.get(i).getWorkerName();
+                }
+                ServiceDTO tempService = new ServiceDTO(id, serviceName, workerName);
                 serviceList.set(i, tempService);
                 return serviceList.get(i);
             }
