@@ -5,6 +5,9 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 public class ServiceDTO {
     @Positive
     private final int id;
@@ -16,10 +19,12 @@ public class ServiceDTO {
     @NotEmpty
     @NotNull
     private final String workerName;
-    public ServiceDTO(int id, String serviceName, String workerName) {
+    private final LocalDateTime dateTime;
+    public ServiceDTO(int id, String serviceName, String workerName, LocalDateTime dateTime) {
         this.id = id;
         this.serviceName = serviceName;
         this.workerName = workerName;
+        this.dateTime = dateTime;
     }
 
     public int getId() {
@@ -30,5 +35,9 @@ public class ServiceDTO {
     }
     public String getWorkerName() {
         return this.workerName;
+    }
+
+    public LocalDateTime getDateTime() {
+        return this.dateTime;
     }
 }

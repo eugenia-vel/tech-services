@@ -8,13 +8,14 @@ import jakarta.validation.constraints.Positive;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 @Validated
 @RequestMapping("/api/v1/service")
 @RestController
-public class ServiceController {
+public class TechWorkController {
     private List<ServiceDTO> serviceList = new ArrayList<>();
 
     @PostMapping
@@ -44,7 +45,8 @@ public class ServiceController {
     @PutMapping("/{id}")
     public ServiceDTO editService (@PathVariable @Positive int id,
                                    @RequestParam(required = false) @NotBlank @NotEmpty String serviceName,
-                                   @RequestParam(required = false) @NotBlank @NotEmpty String workerName){
+                                   @RequestParam(required = false) @NotBlank @NotEmpty String workerName,
+                                   @RequestParam(required = false) LocalDateTime dateTime){
         for (int i = 0; i < serviceList.size(); i++) {
             if (serviceList.get(i).getId() == id) {
                 if (serviceName == null){
@@ -53,7 +55,10 @@ public class ServiceController {
                 if (workerName == null){
                     workerName = serviceList.get(i).getWorkerName();
                 }
-                ServiceDTO tempService = new ServiceDTO(id, serviceName, workerName);
+                if (dateTime == null) {
+                    dateTime = serviceList.get(i).getDateTime();
+                }
+                ServiceDTO tempService = new ServiceDTO(id, serviceName, workerName, dateTime);
                 serviceList.set(i, tempService);
                 return serviceList.get(i);
             }
