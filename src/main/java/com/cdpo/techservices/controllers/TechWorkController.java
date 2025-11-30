@@ -1,10 +1,15 @@
 package com.cdpo.techservices.controllers;
 
 import com.cdpo.techservices.dto.ServiceDTO;
+import com.cdpo.techservices.dto.TechWorkRequestDTO;
+import com.cdpo.techservices.dto.TechWorkResponseDTO;
+import com.cdpo.techservices.services.TechWorkService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Positive;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,56 +18,38 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Validated
-@RequestMapping("/api/v1/service")
+@RequestMapping("/api/v1/techwork")
 @RestController
 public class TechWorkController {
-    private List<ServiceDTO> serviceList = new ArrayList<>();
+    private final TechWorkService techWorkService;
+
+    public TechWorkController(TechWorkService techWorkService) {
+        this.techWorkService = techWorkService;
+    }
 
     @PostMapping
-    public int createService (@RequestBody() @Valid ServiceDTO serviceDTO) {
-        List<ServiceDTO> serviceTemp = new ArrayList<>(serviceList);
-        serviceTemp.add(serviceDTO);
-        serviceList = serviceTemp;
-        System.out.println(serviceList);
-        return 0;
+    public ResponseEntity<?> bookService(@RequestBody @Valid TechWorkRequestDTO techWorkDTO){
+        return new ResponseEntity<>(techWorkService.bookService(techWorkDTO), HttpStatus.OK);
     }
 
-    @GetMapping
-    public ServiceDTO getServiceById (@RequestParam @Positive int id) {
-        for (ServiceDTO service : serviceList) {
-            if (service.getId() == id) {
-                return service;
-            }
-        }
-        return null;
-    }
-
-    @GetMapping("/services")
-    public List<ServiceDTO> getListOfServices () {
-        return serviceList;
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> cancelBooking(@PathVariable("id") @Positive int id) {
+        return new ResponseEntity<>(techWorkService.cancelBooking(), HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
-    public ServiceDTO editService (@PathVariable @Positive int id,
-                                   @RequestParam(required = false) @NotBlank @NotEmpty String serviceName,
-                                   @RequestParam(required = false) @NotBlank @NotEmpty String workerName,
-                                   @RequestParam(required = false) LocalDateTime dateTime){
-        for (int i = 0; i < serviceList.size(); i++) {
-            if (serviceList.get(i).getId() == id) {
-                if (serviceName == null){
-                    serviceName = serviceList.get(i).getServiceName();
-                }
-                if (workerName == null){
-                    workerName = serviceList.get(i).getWorkerName();
-                }
-                if (dateTime == null) {
-                    dateTime = serviceList.get(i).getDateTime();
-                }
-                ServiceDTO tempService = new ServiceDTO(id, serviceName, workerName, dateTime);
-                serviceList.set(i, tempService);
-                return serviceList.get(i);
-            }
-        }
-        return null;
+    public ResponseEntity<?> editBooking(@PathVariable("id") @Positive int id,
+                                         @RequestParam LocalDateTime dateTime){
+        return new ResponseEntity<>(techWorkService.editBooking(id, dateTime), HttpStatus.OK);
+    }
+
+    @GetMapping("/my-bookings")
+    public List<TechWorkResponseDTO> getAllBookings() {
+        return techWorkService.getAllBookings();
+    }
+
+    @GetMapping("/past-services")
+    public List<TechWorkResponseDTO> getPastBookings() {
+        return techWorkService.getPastServices();
     }
 }

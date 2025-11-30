@@ -4,6 +4,7 @@ import com.cdpo.techservices.dto.TechWorkRequestDTO;
 import com.cdpo.techservices.dto.TechWorkResponseDTO;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -16,7 +17,7 @@ public class TechWorkService {
         // TODO:: remove from a database
         return 0;
     }
-    public TechWorkResponseDTO editBooking(int id) {
+    public TechWorkResponseDTO editBooking(int id, LocalDateTime newDateTime) {
         //TODO:: change booking info in a db
         return null;
     }
