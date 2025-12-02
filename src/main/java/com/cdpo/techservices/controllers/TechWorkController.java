@@ -1,12 +1,9 @@
 package com.cdpo.techservices.controllers;
 
-import com.cdpo.techservices.dto.ServiceDTO;
 import com.cdpo.techservices.dto.TechWorkRequestDTO;
 import com.cdpo.techservices.dto.TechWorkResponseDTO;
 import com.cdpo.techservices.services.TechWorkService;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Positive;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,7 +11,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 @Validated
