@@ -5,6 +5,9 @@ import jakarta.validation.constraints.*;
 import java.time.LocalDateTime;
 
 public record TechWorkRequestDTO(
+        @Positive
+        Long id,
+
         @NotEmpty
         @NotNull
         @NotBlank
