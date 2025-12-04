@@ -29,4 +29,11 @@ public class TechWorkService {
         //TODO:: list all past bookings
         return null;
     }
+    public List<TechWorkResponseDTO> getBookingsByTime() {
+        //TODO:: list all bookings by chosen time
+        return null;
+    }
+    public int getRevenueByDate(){
+        return 0;
+    }
 }

@@ -8,30 +8,36 @@ import java.time.LocalDateTime;
 
 
 @Entity
-@Table(name="TechWork")
+@Table(name="tech_work")
 public class TechWork {
     @Id
-    @GeneratedValue
-    @Column(name = "Id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private long id;
 
-    @Column(name="TechWorkName")
-    private String techWorkName;
+    @Column(name="service_name", nullable = false)
+    private String serviceName;
 
-    @Column(name="WorkerName")
+    @Column(name="worker_name")
     private String workerName;
 
-    @Column(name = "AppointmentTime")
+    @Column(name = "appointment_time", nullable = false)
     private LocalDateTime appointmentTime;
 
-    @Column(name = "CreatedAt")
+    @Column(name="service_time", nullable = false)
+    private Float serviceTime;
+
+    @Column(name="cost_per_hour", nullable = false)
+    private int costPerHour;
+
+    @Column(name = "created_at")
     @CreationTimestamp
     private LocalDateTime createdAt;
 
-    @Column(name = "UpdatedAt")
+    @Column(name = "updated_at")
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 
-    @Column(name = "Address")
+    @Column(name = "address", nullable = false)
     private String address;
 }

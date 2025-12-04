@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -47,5 +48,15 @@ public class TechWorkController {
     @GetMapping("/past-services")
     public List<TechWorkResponseDTO> getPastBookings() {
         return techWorkService.getPastServices();
+    }
+
+    @GetMapping("/{appointment-time}")
+    public List<TechWorkResponseDTO> getBookingsByTime(@PathVariable("appointment-time") LocalDateTime appointmentTime) {
+        return techWorkService.getBookingsByTime();
+    }
+
+    @GetMapping("/date")
+    public int getRevenueByDate(@PathVariable("date") LocalDate date) {
+        return techWorkService.getRevenueByDate();
     }
 }
