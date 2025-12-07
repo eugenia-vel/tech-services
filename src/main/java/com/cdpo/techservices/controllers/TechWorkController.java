@@ -2,6 +2,7 @@ package com.cdpo.techservices.controllers;
 
 import com.cdpo.techservices.dto.TechWorkRequestDTO;
 import com.cdpo.techservices.dto.TechWorkResponseDTO;
+import com.cdpo.techservices.exceptions.TechWorkException;
 import com.cdpo.techservices.services.TechWorkService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -11,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.net.URI;
 import java.time.LocalDate;
@@ -41,37 +43,65 @@ public class TechWorkController {
     @DeleteMapping("/{id}")
     public ResponseEntity<?> cancelBooking(@PathVariable("id") @NotNull @Positive Long id) {
         log.debug("DELETE request");
-        return new ResponseEntity<>(techWorkService.cancelBooking(id), HttpStatus.OK);
+        try {
+            return new ResponseEntity<>(techWorkService.cancelBooking(id), HttpStatus.OK);
+        } catch (TechWorkException e) {
+            throw new ResponseStatusException(e.getHttpStatus(), e.getMessage());
+        }
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<?> editBooking(@PathVariable("id") @Positive int id,
                                          @RequestParam LocalDateTime dateTime) {
-        return new ResponseEntity<>(techWorkService.editBooking(id, dateTime), HttpStatus.OK);
+        try {
+            return new ResponseEntity<>(techWorkService.editBooking(id, dateTime), HttpStatus.OK);
+        }  catch (TechWorkException e) {
+            throw new ResponseStatusException(e.getHttpStatus(), e.getMessage());
+        }
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getBookingById(@PathVariable("id") @Positive Long id) {
-        return new ResponseEntity<>(techWorkService.getBookingById(id), HttpStatus.OK);
+        try {
+            return new ResponseEntity<>(techWorkService.getBookingById(id), HttpStatus.OK);
+        } catch (TechWorkException e) {
+            throw new ResponseStatusException(e.getHttpStatus(), e.getMessage());
+        }
     }
 
     @GetMapping("/my-bookings")
     public List<TechWorkResponseDTO> getAllBookings() {
-        return techWorkService.getAllBookings();
+        try {
+            return techWorkService.getAllBookings();
+        } catch (TechWorkException e) {
+            throw new ResponseStatusException(e.getHttpStatus(), e.getMessage());
+        }
     }
 
     @GetMapping("/past-services")
     public List<TechWorkResponseDTO> getPastBookings() {
-        return techWorkService.getPastServices();
+        try {
+            return techWorkService.getPastServices();
+        } catch (TechWorkException e) {
+            throw new ResponseStatusException(e.getHttpStatus(), e.getMessage());
+        }
     }
 
     @GetMapping("/{appointment-time}")
     public List<TechWorkResponseDTO> getBookingsByTime(@PathVariable("appointment-time") LocalDateTime appointmentTime) {
-        return techWorkService.getBookingsByTime(appointmentTime);
+        try {
+            return techWorkService.getBookingsByTime(appointmentTime);
+        } catch (TechWorkException e) {
+            throw new ResponseStatusException(e.getHttpStatus(), e.getMessage());
+        }
     }
 
     @GetMapping("/date")
     public int getRevenueByDate(@PathVariable("date") LocalDate date) {
-        return techWorkService.getRevenueByDate(date);
+        try {
+            return techWorkService.getRevenueByDate(date);
+        } catch (TechWorkException e) {
+            throw new ResponseStatusException(e.getHttpStatus(), e.getMessage());
+        }
     }
 }
