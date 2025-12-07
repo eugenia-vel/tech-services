@@ -1,12 +1,18 @@
 package com.cdpo.techservices.entity;
 
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 
+@Builder
+@Getter
+@Setter
 @Entity
 @Table(name="tech_work")
 public class TechWork {
@@ -15,20 +21,11 @@ public class TechWork {
     @Column(name = "id")
     private long id;
 
-    @Column(name="service_name", nullable = false)
-    private String serviceName;
-
-    @Column(name="worker_name")
-    private String workerName;
-
     @Column(name = "appointment_time", nullable = false)
     private LocalDateTime appointmentTime;
 
     @Column(name="service_time", nullable = false)
     private Float serviceTime;
-
-    @Column(name="cost_per_hour", nullable = false)
-    private int costPerHour;
 
     @Column(name = "created_at")
     @CreationTimestamp
@@ -40,4 +37,7 @@ public class TechWork {
 
     @Column(name = "address", nullable = false)
     private String address;
+
+    @OneToMany
+    private ServiceCategory serviceCategory;
 }

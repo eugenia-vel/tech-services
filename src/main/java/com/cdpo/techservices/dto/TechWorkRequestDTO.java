@@ -6,8 +6,6 @@ import java.sql.Time;
 import java.time.LocalDateTime;
 
 public record TechWorkRequestDTO(
-        @Positive
-        Long id,
 
         @NotEmpty
         @NotNull

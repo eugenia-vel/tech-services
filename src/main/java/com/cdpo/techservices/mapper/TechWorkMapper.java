@@ -7,10 +7,19 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class TechWorkMapper {
-    public TechWork mapToEntity(TechWorkRequestDTO) {
+    public TechWork mapToEntity(TechWorkRequestDTO techWorkRequestDTO) {
+        return TechWork.builder()
+                .appointmentTime(techWorkRequestDTO.appointmentTime())
+                .serviceTime(techWorkRequestDTO.serviceTime())
+                .address(techWorkRequestDTO.address()).build();
     }
 
-    public TechWorkResponseDTO mapToDTO(TechWork) {
-
+    public TechWorkResponseDTO mapToDTO(TechWork techWork) {
+        return new TechWorkResponseDTO(techWork.getServiceCategory().getServiceName(),
+                techWork.getServiceCategory().getWorkerName(),
+                techWork.getAppointmentTime(),
+                techWork.getServiceTime(),
+                techWork.getAddress(),
+                techWork.getServiceCategory().getCostPerHour()*techWork.getServiceTime());
     }
 }

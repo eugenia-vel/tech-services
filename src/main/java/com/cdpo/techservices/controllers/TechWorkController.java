@@ -18,6 +18,7 @@ import java.util.List;
 @RequestMapping("/api/v1/techwork")
 @RestController
 public class TechWorkController {
+
     private final TechWorkService techWorkService;
 
     public TechWorkController(TechWorkService techWorkService) {
@@ -26,6 +27,7 @@ public class TechWorkController {
 
     @PostMapping
     public ResponseEntity<?> bookService(@RequestBody @Valid TechWorkRequestDTO techWorkDTO){
+
         return new ResponseEntity<>(techWorkService.bookService(techWorkDTO), HttpStatus.OK);
     }
 
@@ -36,8 +38,13 @@ public class TechWorkController {
 
     @PutMapping("/{id}")
     public ResponseEntity<?> editBooking(@PathVariable("id") @Positive int id,
-                                         @RequestParam LocalDateTime dateTime){
+                                         @RequestParam LocalDateTime dateTime) {
         return new ResponseEntity<>(techWorkService.editBooking(id, dateTime), HttpStatus.OK);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getBookingById(@PathVariable("id") @Positive int id) {
+        return new ResponseEntity<>(techWorkService.getBookingById(id), HttpStatus.OK);
     }
 
     @GetMapping("/my-bookings")
