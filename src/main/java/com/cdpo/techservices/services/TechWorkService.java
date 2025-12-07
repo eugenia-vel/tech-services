@@ -2,14 +2,22 @@ package com.cdpo.techservices.services;
 
 import com.cdpo.techservices.dto.TechWorkRequestDTO;
 import com.cdpo.techservices.dto.TechWorkResponseDTO;
+import com.cdpo.techservices.entity.ServiceCategory;
+import com.cdpo.techservices.entity.TechWork;
+import com.cdpo.techservices.exceptions.TechWorkException;
 import com.cdpo.techservices.mapper.TechWorkMapper;
 import com.cdpo.techservices.repository.ServiceCategoryRepository;
 import com.cdpo.techservices.repository.TechWorkRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
+@RequiredArgsConstructor
 @Service
 public class TechWorkService {
 
@@ -17,35 +25,46 @@ public class TechWorkService {
     private final ServiceCategoryRepository serviceCategoryRepository;
     private final TechWorkMapper techWorkMapper;
 
-    public int bookService(TechWorkRequestDTO techWork) {
-        // TODO:: add to database
-        return 0;
+    public Long bookService(TechWorkRequestDTO techWorkRequest) {
+        ServiceCategory serviceCategory = serviceCategoryRepository
+                .findByServiceName(techWorkRequest.serviceName())
+                .get();
+        TechWork techWork = techWorkMapper.mapToEntity(techWorkRequest);
+        techWork.setServiceCategory(serviceCategory);
+        techWorkRepository.save(techWork);
+        return techWork.getId();
     }
-    public int cancelBooking() {
-        // TODO:: remove from a database
+    public int cancelBooking(Long id) {
+        techWorkRepository.deleteById(id);
         return 0;
     }
     public TechWorkResponseDTO editBooking(int id, LocalDateTime newDateTime) {
         //TODO:: change booking info in a db
         return null;
     }
-    public TechWorkResponseDTO getBookingById(int id) {
-        //TODO: find in a db by id
-        return null;
+    public TechWorkResponseDTO getBookingById(Long id) {
+        TechWork service = techWorkRepository.findById(id)
+                .orElseThrow(() -> new TechWorkException(HttpStatus.NOT_FOUND, "Запись не найдена"));
+        return techWorkMapper.mapToDTO(service);
     }
     public List<TechWorkResponseDTO> getAllBookings() {
-        //TODO:: list all future bookings
-        return null;
+        List<TechWork> bookings = techWorkRepository.findFutureBookings(LocalDateTime.now());
+        if (bookings.isEmpty()) throw new TechWorkException(HttpStatus.NOT_FOUND, "Запись не найдена");
+        return bookings.stream().map(techWorkMapper::mapToDTO).toList();
     }
     public List<TechWorkResponseDTO> getPastServices() {
-        //TODO:: list all past bookings
-        return null;
+        List <TechWork> pastBookings = techWorkRepository.findPastBookings(LocalDateTime.now());
+        if (pastBookings.isEmpty()) throw new TechWorkException(HttpStatus.NOT_FOUND, "Запись не найдена");
+        return pastBookings.stream().map(techWorkMapper::mapToDTO).toList();
     }
-    public List<TechWorkResponseDTO> getBookingsByTime() {
-        //TODO:: list all bookings by chosen time
-        return null;
+    public List<TechWorkResponseDTO> getBookingsByTime(LocalDateTime appointmentTime) {
+        List<TechWork> bookings = techWorkRepository.findBookingsByTime(appointmentTime);
+        if (bookings.isEmpty()) throw new TechWorkException(HttpStatus.NOT_FOUND, "Запись не найдена");
+        return bookings.stream().map(techWorkMapper::mapToDTO).toList();
     }
-    public int getRevenueByDate(){
+    public int getRevenueByDate(LocalDate date){
+        LocalDateTime dayStart = date.atStartOfDay();
+        LocalDateTime dayEnd = date.plusDays(1).atStartOfDay();
         return 0;
     }
 }

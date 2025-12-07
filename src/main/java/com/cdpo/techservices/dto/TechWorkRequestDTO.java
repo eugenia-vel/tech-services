@@ -7,19 +7,17 @@ import java.time.LocalDateTime;
 
 public record TechWorkRequestDTO(
 
-        @NotEmpty
-        @NotNull
         @NotBlank
         String serviceName,
 
-        @NotEmpty
-        @NotNull
         @NotBlank
         String workerName,
 
+        @NotNull
         @Future
         LocalDateTime appointmentTime,
 
+        @NotEmpty
         @Positive
         Float serviceTime,
 
