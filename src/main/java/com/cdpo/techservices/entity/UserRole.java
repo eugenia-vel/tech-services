@@ -1,7 +1,9 @@
 package com.cdpo.techservices.entity;
 
 import jakarta.persistence.*;
+import lombok.Setter;
 
+@Setter
 @Entity
 public class UserRole {
 
