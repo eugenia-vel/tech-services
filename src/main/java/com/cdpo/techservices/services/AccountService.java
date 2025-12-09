@@ -43,12 +43,10 @@ public class AccountService {
         if (applicationUserRepository.existsByUsername(info.getUsername())){
             throw new AccountException("User with username exist");
         }
-        applicationUserRepository.findByUsername(username)
-                .ifPresentOrElse(applicationUser -> {
-                    applicationUser.setUsernameIfNotNull(info.getUsername());
-                    applicationUser.setPasswordIfNotNull(passwordEncoder.encode(info.getPassword()));
-                    applicationUserRepository.save(applicationUser);
-                    }, () -> {}
-        );
+        ApplicationUser applicationUser = applicationUserRepository.findByUsername(username)
+                .orElseThrow(() -> new AccountException("User with username doesn't exist"));
+        applicationUser.setUsernameIfNotNull(info.getUsername());
+        applicationUser.setPasswordIfNotNull(passwordEncoder.encode(info.getPassword()));
+        applicationUserRepository.save(applicationUser);
     }
 }

@@ -51,7 +51,7 @@ public class TechWorkController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> editBooking(@PathVariable("id") @Positive int id,
+    public ResponseEntity<?> editBooking(@PathVariable("id") @Positive Long id,
                                          @RequestParam LocalDateTime dateTime) {
         try {
             return new ResponseEntity<>(techWorkService.editBooking(id, dateTime), HttpStatus.OK);

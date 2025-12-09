@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -38,10 +37,24 @@ public class TechWorkService {
         techWorkRepository.deleteById(id);
         return 0;
     }
-    public TechWorkResponseDTO editBooking(int id, LocalDateTime newDateTime) {
-        //TODO:: change booking info in a db
-        return null;
+    public TechWorkResponseDTO editBooking(Long id, LocalDateTime dateTime) {
+        TechWork service = techWorkRepository.findById(id)
+                .orElseThrow(() -> new TechWorkException(HttpStatus.NOT_FOUND, "Запись не найдена"));
+        service.setAppointmentTime(dateTime);
+        techWorkRepository.save(service);
+        return techWorkMapper.mapToDTO(service);
     }
+
+    public TechWorkResponseDTO changeBookingInfo(Long id, TechWorkRequestDTO techWorkRequest) {
+        TechWork service = techWorkRepository.findById(id)
+                .orElseThrow(() -> new TechWorkException(HttpStatus.NOT_FOUND, "Запись не найдена"));
+        service.setAppointmentTime(techWorkRequest.appointmentTime());
+        service.setServiceTime(techWorkRequest.serviceTime());
+        service.setAddress(techWorkRequest.address());
+        techWorkRepository.save(service);
+        return techWorkMapper.mapToDTO(service);
+    }
+
     public TechWorkResponseDTO getBookingById(Long id) {
         TechWork service = techWorkRepository.findById(id)
                 .orElseThrow(() -> new TechWorkException(HttpStatus.NOT_FOUND, "Запись не найдена"));
@@ -63,6 +76,7 @@ public class TechWorkService {
         return bookings.stream().map(techWorkMapper::mapToDTO).toList();
     }
     public int getRevenueByDate(LocalDate date){
+        // TODO:: count revenue
         LocalDateTime dayStart = date.atStartOfDay();
         LocalDateTime dayEnd = date.plusDays(1).atStartOfDay();
         return 0;
