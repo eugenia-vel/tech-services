@@ -38,6 +38,9 @@ public class TechWork {
     @Column(name = "address", nullable = false)
     private String address;
 
+    @Column(name = "discount", nullable = false)
+    private int discount;
+
     @OneToMany
     private ServiceCategory serviceCategory;
 }

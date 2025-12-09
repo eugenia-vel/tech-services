@@ -10,6 +10,7 @@ import com.cdpo.techservices.repository.ServiceCategoryRepository;
 import com.cdpo.techservices.repository.TechWorkRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -51,6 +52,15 @@ public class TechWorkService {
         service.setAppointmentTime(techWorkRequest.appointmentTime());
         service.setServiceTime(techWorkRequest.serviceTime());
         service.setAddress(techWorkRequest.address());
+        techWorkRepository.save(service);
+        return techWorkMapper.mapToDTO(service);
+    }
+
+    @Secured("ADMIN")
+    public TechWorkResponseDTO setDiscount(Long id, int discount) {
+        TechWork service = techWorkRepository.findById(id)
+                .orElseThrow(() -> new TechWorkException(HttpStatus.NOT_FOUND, "Запись не найдена"));
+        service.setDiscount(discount);
         techWorkRepository.save(service);
         return techWorkMapper.mapToDTO(service);
     }

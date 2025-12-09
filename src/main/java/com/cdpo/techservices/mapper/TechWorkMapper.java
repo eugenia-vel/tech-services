@@ -11,7 +11,9 @@ public class TechWorkMapper {
         return TechWork.builder()
                 .appointmentTime(techWorkRequestDTO.appointmentTime())
                 .serviceTime(techWorkRequestDTO.serviceTime())
-                .address(techWorkRequestDTO.address()).build();
+                .address(techWorkRequestDTO.address())
+                .discount(0)
+                .build();
     }
 
     public TechWorkResponseDTO mapToDTO(TechWork techWork) {

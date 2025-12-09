@@ -10,6 +10,7 @@ import jakarta.validation.constraints.Positive;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.parameters.P;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
@@ -56,6 +57,25 @@ public class TechWorkController {
         try {
             return new ResponseEntity<>(techWorkService.editBooking(id, dateTime), HttpStatus.OK);
         }  catch (TechWorkException e) {
+            throw new ResponseStatusException(e.getHttpStatus(), e.getMessage());
+        }
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> changeBookingInfo(@PathVariable("id") @Positive Long id,
+                                               @RequestParam TechWorkRequestDTO requestDTO) {
+        try {
+            return new ResponseEntity<>(techWorkService.changeBookingInfo(id, requestDTO), HttpStatus.OK);
+        } catch (TechWorkException e) {
+            throw new ResponseStatusException(e.getHttpStatus(), e.getMessage());
+        }
+    }
+
+    @PutMapping("/{id}/discount")
+    public ResponseEntity<?> setDiscount(@PathVariable("id") @Positive Long id, int discount) {
+        try {
+            return new ResponseEntity<>(techWorkService.setDiscount(id, discount), HttpStatus.OK);
+        } catch (TechWorkException e){
             throw new ResponseStatusException(e.getHttpStatus(), e.getMessage());
         }
     }
