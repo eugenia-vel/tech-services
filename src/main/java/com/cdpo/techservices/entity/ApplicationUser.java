@@ -18,6 +18,7 @@ public class ApplicationUser {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(unique=true)
     private String username;
 
     private String password;
@@ -26,4 +27,11 @@ public class ApplicationUser {
     @JoinColumn(name = "role_id")
     private UserRole userRole;
 
+    public void setUsernameIfNotNull(String name) {
+        this.username = name;
+    }
+
+    public void setPasswordIfNotNull(String password) {
+        this.password = password;
+    }
 }

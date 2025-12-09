@@ -23,7 +23,7 @@ public class AccountService {
         this.userRoleRepository = userRoleRepository;
     }
 
-    public void register(ApplicationUser user) {
+    public void register(ApplicationUser user) throws AccountException {
         if (applicationUserRepository.existsByUsername(user.getUsername())) {
             throw new AccountException("Username is already taken");
         }
@@ -38,5 +38,17 @@ public class AccountService {
                 );
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         applicationUserRepository.save(user);
+    }
+    public void changeAccountInfo(String username, ApplicationUser info) throws AccountException {
+        if (applicationUserRepository.existsByUsername(info.getUsername())){
+            throw new AccountException("User with username exist");
+        }
+        applicationUserRepository.findByUsername(username)
+                .ifPresentOrElse(applicationUser -> {
+                    applicationUser.setUsernameIfNotNull(info.getUsername());
+                    applicationUser.setPasswordIfNotNull(passwordEncoder.encode(info.getPassword()));
+                    applicationUserRepository.save(applicationUser);
+                    }, () -> {}
+        );
     }
 }

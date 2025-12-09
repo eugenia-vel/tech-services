@@ -1,13 +1,12 @@
 package com.cdpo.techservices.controllers;
 
 import com.cdpo.techservices.entity.ApplicationUser;
+import com.cdpo.techservices.exceptions.AccountException;
 import com.cdpo.techservices.services.AccountService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-
-import javax.security.auth.login.AccountException;
 
 @Controller
 @RequestMapping("/account")
@@ -28,9 +27,9 @@ public class AccountController {
     public String register(ApplicationUser user) {
         try {
             accountService.register(user);
-            return "redirect::/next";
         } catch (AccountException e) {
-            return "account/registration";
+            throw new RuntimeException(e);
         }
+        return "redirect::/next";
     }
 }

@@ -6,7 +6,7 @@ import org.springframework.http.HttpStatus;
 
 @Getter
 @Setter
-public class AccountException extends RuntimeException{
+public class AccountException extends Exception{
 
     public AccountException(String message) {
         super(message);
