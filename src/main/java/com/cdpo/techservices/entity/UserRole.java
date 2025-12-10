@@ -1,9 +1,11 @@
 package com.cdpo.techservices.entity;
 
 import jakarta.persistence.*;
+import lombok.Getter;
 import lombok.Setter;
 
 @Setter
+@Getter
 @Entity
 public class UserRole {
 
@@ -15,8 +17,8 @@ public class UserRole {
     private RoleType roleType;
 
     public enum RoleType {
-        USER,
-        OPERATOR,
-        ADMIN
+        ROLE_USER,
+        ROLE_OPERATOR,
+        ROLE_ADMIN
     }
 }

@@ -17,7 +17,9 @@ public class AccountService {
     private final PasswordEncoder passwordEncoder;
     private final UserRoleRepository userRoleRepository;
 
-    public AccountService(ApplicationUserRepository applicationUserRepository, PasswordEncoder passwordEncoder, UserRoleRepository userRoleRepository) {
+    public AccountService(ApplicationUserRepository applicationUserRepository,
+                          PasswordEncoder passwordEncoder,
+                          UserRoleRepository userRoleRepository) {
         this.applicationUserRepository = applicationUserRepository;
         this.passwordEncoder = passwordEncoder;
         this.userRoleRepository = userRoleRepository;
@@ -27,11 +29,11 @@ public class AccountService {
         if (applicationUserRepository.existsByUsername(user.getUsername())) {
             throw new AccountException("Username is already taken");
         }
-        userRoleRepository.findByRoleType(UserRole.RoleType.USER)
+        userRoleRepository.findByRoleType(UserRole.RoleType.ROLE_USER)
                 .ifPresentOrElse(user::setUserRole,
                         () -> {
                             UserRole userRole = new UserRole();
-                            userRole.setRoleType(UserRole.RoleType.USER);
+                            userRole.setRoleType(UserRole.RoleType.ROLE_USER);
                             user.setUserRole(userRole);
                             userRoleRepository.save(userRole);
                         }
@@ -39,14 +41,16 @@ public class AccountService {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         applicationUserRepository.save(user);
     }
-    public void changeAccountInfo(String username, ApplicationUser info) throws AccountException {
-        if (applicationUserRepository.existsByUsername(info.getUsername())){
-            throw new AccountException("User with username exist");
+
+    public ApplicationUser changeAccountInfo(Long id, ApplicationUser info) throws AccountException {
+        if (applicationUserRepository.existsByUsername(info.getUsername())) {
+            throw new AccountException("User with new username" + info.getUsername() + "already exists");
         }
-        ApplicationUser applicationUser = applicationUserRepository.findByUsername(username)
-                .orElseThrow(() -> new AccountException("User with username doesn't exist"));
+        ApplicationUser applicationUser = applicationUserRepository.findById(id)
+                .orElseThrow(() -> new AccountException("User with this username doesn't exist"));
         applicationUser.setUsernameIfNotNull(info.getUsername());
         applicationUser.setPasswordIfNotNull(passwordEncoder.encode(info.getPassword()));
         applicationUserRepository.save(applicationUser);
+        return applicationUser;
     }
 }
