@@ -3,12 +3,21 @@ package com.cdpo.techservices.services;
 
 import com.cdpo.techservices.entity.UserRole;
 import com.cdpo.techservices.repository.UserRoleRepository;
+import com.nimbusds.jose.JOSEException;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
 
 import com.cdpo.techservices.entity.ApplicationUser;
 import com.cdpo.techservices.exceptions.AccountException;
 import com.cdpo.techservices.repository.ApplicationUserRepository;
-import org.springframework.stereotype.Service;
+import com.cdpo.techservices.entity.Token;
+//import com.cdpo.techservices.services.JwtSecurityService;
+
 
 @Service
 public class AccountService {
@@ -16,13 +25,19 @@ public class AccountService {
     private final ApplicationUserRepository applicationUserRepository;
     private final PasswordEncoder passwordEncoder;
     private final UserRoleRepository userRoleRepository;
+    private final JwtSecurityService jwtSecurityService;
+    private final AuthenticationManager authenticationManager;
 
     public AccountService(ApplicationUserRepository applicationUserRepository,
                           PasswordEncoder passwordEncoder,
-                          UserRoleRepository userRoleRepository) {
+                          UserRoleRepository userRoleRepository,
+                          JwtSecurityService jwtSecurityService,
+                          AuthenticationManager authenticationManager) {
         this.applicationUserRepository = applicationUserRepository;
         this.passwordEncoder = passwordEncoder;
         this.userRoleRepository = userRoleRepository;
+        this.jwtSecurityService = jwtSecurityService;
+        this.authenticationManager = authenticationManager;
     }
 
     public void register(ApplicationUser user) throws AccountException {
@@ -52,5 +67,21 @@ public class AccountService {
         applicationUser.setPasswordIfNotNull(passwordEncoder.encode(info.getPassword()));
         applicationUserRepository.save(applicationUser);
         return applicationUser;
+    }
+
+    public Token loginAccount(String username, String password) throws AccountException {
+
+        Authentication authentication = authenticationManager
+                .authenticate(new UsernamePasswordAuthenticationToken(username, password));
+
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        Token token = new Token();
+        try {
+            token.setToken(jwtSecurityService.generateToken((UserDetails) authentication.getPrincipal()));
+            token.setRefreshToken(jwtSecurityService.generateRefreshToken());
+        } catch (JOSEException e) {
+            throw new AccountException("Token cannot ne created: " + e.getMessage());
+        }
+        return token;
     }
 }

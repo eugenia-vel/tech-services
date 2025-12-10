@@ -26,8 +26,8 @@ public class UserDetailService implements UserDetailsService {
         ApplicationUser applicationUser = applicationUserRepository.findByUsername(username)
                 .orElseThrow(()->new UsernameNotFoundException("ApplicationUser not found"));
 
-        GrantedAuthority authority = new SimpleGrantedAuthority(
-                applicationUser.getUserRole().getRoleType().name());
+        GrantedAuthority authority = new SimpleGrantedAuthority(applicationUser
+                .getUserRole().getRoleType().name());
         System.out.println(authority.getAuthority());
 
         return new User(username, applicationUser.getPassword(), Set.of(authority));
