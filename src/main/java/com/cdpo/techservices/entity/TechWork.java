@@ -41,6 +41,6 @@ public class TechWork {
     @Column(name = "discount", nullable = false)
     private int discount;
 
-    @OneToMany
+    @ManyToOne
     private ServiceCategory serviceCategory;
 }

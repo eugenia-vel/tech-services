@@ -56,7 +56,6 @@ public class TechWorkService {
         return techWorkMapper.mapToDTO(service);
     }
 
-    @Secured("ADMIN")
     public TechWorkResponseDTO setDiscount(Long id, int discount) {
         TechWork service = techWorkRepository.findById(id)
                 .orElseThrow(() -> new TechWorkException(HttpStatus.NOT_FOUND, "Запись не найдена"));
@@ -85,10 +84,16 @@ public class TechWorkService {
         if (bookings.isEmpty()) throw new TechWorkException(HttpStatus.NOT_FOUND, "Запись не найдена");
         return bookings.stream().map(techWorkMapper::mapToDTO).toList();
     }
-    public int getRevenueByDate(LocalDate date){
-        // TODO:: count revenue
+    public float getRevenueByDate(LocalDate date){
         LocalDateTime dayStart = date.atStartOfDay();
         LocalDateTime dayEnd = date.plusDays(1).atStartOfDay();
-        return 0;
+        List<TechWork> all_bookings = techWorkRepository.findAllBookingsInADay(dayStart, dayEnd);
+        float revenue = 0;
+        for (TechWork booking : all_bookings) {
+            revenue += booking.getServiceCategory().getCostPerHour()
+                    * booking.getServiceTime()
+                    * (100 - booking.getDiscount())/100;
+        }
+        return revenue;
     }
 }

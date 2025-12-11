@@ -5,6 +5,7 @@ import com.cdpo.techservices.entity.Token;
 import com.cdpo.techservices.exceptions.AccountException;
 import com.cdpo.techservices.services.AccountService;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
@@ -49,7 +50,9 @@ public class AccountController {
         }
         return "redirect::/next";
     }
-    @PutMapping("/{id}/change")
+
+    @Secured({"USER", "ADMIN", "OPERATOR"})
+    @PutMapping("/change/{id}")
     public ApplicationUser changeAccountInfo(@PathVariable Long id, ApplicationUser info) {
         try {
             return accountService.changeAccountInfo(id, info);

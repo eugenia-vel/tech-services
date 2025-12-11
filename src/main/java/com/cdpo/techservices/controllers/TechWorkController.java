@@ -10,6 +10,7 @@ import jakarta.validation.constraints.Positive;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
@@ -69,7 +70,7 @@ public class TechWorkController {
             throw new ResponseStatusException(e.getHttpStatus(), e.getMessage());
         }
     }
-
+    @Secured("ROLE_ADMIN")
     @PutMapping("/{id}/discount")
     public ResponseEntity<?> setDiscount(@PathVariable("id") @Positive Long id, int discount) {
         try {
@@ -115,8 +116,9 @@ public class TechWorkController {
         }
     }
 
+    @Secured("ROLE_ADMIN")
     @GetMapping("/date")
-    public int getRevenueByDate(@PathVariable("date") LocalDate date) {
+    public float getRevenueByDate(@PathVariable("date") LocalDate date) {
         try {
             return techWorkService.getRevenueByDate(date);
         } catch (TechWorkException e) {
