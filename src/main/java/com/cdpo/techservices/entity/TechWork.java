@@ -42,5 +42,6 @@ public class TechWork {
     private int discount;
 
     @ManyToOne
+    @JoinColumn(name = "service_category_id")
     private ServiceCategory serviceCategory;
 }

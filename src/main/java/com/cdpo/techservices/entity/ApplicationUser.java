@@ -21,6 +21,7 @@ public class ApplicationUser {
     @Column(unique=true)
     private String username;
 
+    @Column(name = "password")
     private String password;
 
     @ManyToOne

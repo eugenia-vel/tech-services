@@ -5,6 +5,7 @@ import java.util.Set;
 
 import com.cdpo.techservices.entity.ApplicationUser;
 import com.cdpo.techservices.repository.ApplicationUserRepository;
+
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
