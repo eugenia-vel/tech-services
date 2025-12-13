@@ -27,6 +27,7 @@ public class NotificationService {
         javaMailSender.send(createMailMessage(userNotification.message(),
                 new String[]{userEmail}));
     }
+
     private SimpleMailMessage createMailMessage(String message, String[] receiver){
         SimpleMailMessage mailMessage = new SimpleMailMessage();
         mailMessage.setFrom(sendFrom);

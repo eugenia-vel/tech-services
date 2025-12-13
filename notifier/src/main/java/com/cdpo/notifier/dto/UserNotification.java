@@ -6,5 +6,6 @@ import tools.jackson.databind.annotation.JsonNaming;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public record UserNotification(
         String message,
-        Long userId) {
+        Long userId,
+        Long bookingId) {
 }
