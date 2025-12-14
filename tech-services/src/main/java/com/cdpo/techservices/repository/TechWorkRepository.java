@@ -1,5 +1,6 @@
 package com.cdpo.techservices.repository;
 
+import com.cdpo.techservices.constants.BookingStatus;
 import com.cdpo.techservices.entity.TechWork;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -37,4 +38,12 @@ public interface TechWorkRepository extends JpaRepository<TechWork, Long> {
             "WHERE appointment_time >= :dayStart" +
             "AND appointment_time <= :dayEnd")
     List<TechWork> findAllBookingsInADay(LocalDateTime dayStart, LocalDateTime dayEnd);
+
+    @Query(nativeQuery = true,
+            value = "SELECT * FROM tech_work" +
+                    "WHERE appointment_time >= :dayStart" +
+                    "AND appointment_time <= :dayEnd" +
+                    "AND status = :status")
+    List<TechWork> findCompletedBookingsInADay(LocalDateTime dayStart, LocalDateTime dayEnd, BookingStatus status);
+
 }

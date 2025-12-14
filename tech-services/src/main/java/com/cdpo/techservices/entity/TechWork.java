@@ -1,5 +1,6 @@
 package com.cdpo.techservices.entity;
 
+import com.cdpo.techservices.constants.BookingStatus;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -41,7 +42,17 @@ public class TechWork {
     @Column(name = "discount", nullable = false)
     private int discount;
 
+    @Column(name = "price")
+    private int price;
+
+    @Column(name = "status", nullable = false)
+    private BookingStatus status;
+
     @ManyToOne
     @JoinColumn(name = "service_category_id")
     private ServiceCategory serviceCategory;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private ApplicationUser applicationUser;
 }

@@ -1,5 +1,6 @@
 package com.cdpo.techservices.mapper;
 
+import com.cdpo.techservices.dto.BookingDwhDTO;
 import com.cdpo.techservices.dto.TechWorkRequestDTO;
 import com.cdpo.techservices.dto.TechWorkResponseDTO;
 import com.cdpo.techservices.entity.TechWork;
@@ -23,5 +24,18 @@ public class TechWorkMapper {
                 techWork.getServiceTime(),
                 techWork.getAddress(),
                 techWork.getServiceCategory().getCostPerHour()*techWork.getServiceTime());
+    }
+    public BookingDwhDTO mapToDwhDTO(TechWork techWork) {
+
+        return new BookingDwhDTO(techWork.getId(),
+                techWork.getServiceCategory().getServiceName(),
+                techWork.getServiceCategory().getWorkerName(),
+                techWork.getStatus(),
+                techWork.getPrice(),
+                techWork.getAppointmentTime(),
+                techWork.getAddress(),
+                techWork.getServiceTime(),
+                techWork.getApplicationUser().getId()
+        );
     }
 }

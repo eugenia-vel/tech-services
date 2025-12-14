@@ -1,32 +1,32 @@
 package com.cdpo.techservices.services;
 
-import com.cdpo.techservices.dto.NotificationDTO;
-import com.cdpo.techservices.entity.TechWork;
+import com.cdpo.techservices.dto.BookingDwhDTO;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Profile;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 
-@Slf4j
-@AllArgsConstructor
-@Service
-public class NotifierClient {
-    private final RestClient notifierClient;
+import java.util.List;
 
-    public void sendNotification(TechWork booking) {
+@Slf4j
+@Service
+@Profile("rest")
+@AllArgsConstructor
+public class DwhRestService implements DwhService{
+    private final RestClient notifierClient;
+    public List<Long> sendStatistics(List<BookingDwhDTO> bookingsList){
         notifierClient.post()
-                .uri("/notify")
+                .uri("/statistics")
                 .contentType(MediaType.APPLICATION_JSON)
-                .body(new NotificationDTO(createMessage(booking)))
+                .body(bookingsList)
                 .retrieve()
                 .onStatus(status -> !status.is2xxSuccessful(), (request, response) -> {
                     log.error(response.getStatusText());
                 });
-    }
-
-    public String createMessage(TechWork booking) {
-        // TODO::прописать логику создания сообщения
-        return "";
+        //TODO:: Добавить реализацию ответа
+        return null;
     }
 }
