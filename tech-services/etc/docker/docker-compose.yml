@@ -6,12 +6,12 @@ services:
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: service_db
+      POSTGRES_DB: test
     ports:
       - 5432:5432
   adminer:
     image: adminer
     ports:
-      - 8088:8088
+      - 8087:8087
     depends_on:
       - db

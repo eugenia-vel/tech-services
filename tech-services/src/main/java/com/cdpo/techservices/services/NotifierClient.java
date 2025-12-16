@@ -2,14 +2,14 @@ package com.cdpo.techservices.services;
 
 import com.cdpo.techservices.dto.NotificationDTO;
 import com.cdpo.techservices.entity.TechWork;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 
 @Slf4j
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Service
 public class NotifierClient {
     private final RestClient notifierClient;

@@ -12,12 +12,12 @@ import org.springframework.web.client.RestClient;
 @Configuration
 public class TechServiceConfiguration {
 
-    @Bean
-    public RestClient notifierClient() {
-        return RestClient.builder()
-                .baseUrl("http://localhost:8083/api/v1/notifier")
-                .build();
-    }
+//    @Bean
+//    public RestClient notifierClient() {
+//        return RestClient.builder()
+//                .baseUrl("http://localhost:8083/api/v1/notifier")
+//                .build();
+//    }
 
     @Bean
     public Retryer retryer() {
